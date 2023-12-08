@@ -3,10 +3,10 @@ import { join } from "path";
 import { readFileSync } from "fs";
 import express from "express";
 import serveStatic from "serve-static";
-
 import shopify from "./shopify.js";
-import productCreator from "./product-creator.js";
 import PrivacyWebhookHandlers from "./privacy.js";
+import productCreator from "./helper/product-creator.js";
+import fetchProducts from "./helper/fetch-products.js";
 
 const PORT = parseInt(
   process.env.BACKEND_PORT || process.env.PORT || "3000",
@@ -38,6 +38,21 @@ app.post(
 app.use("/api/*", shopify.validateAuthenticatedSession());
 
 app.use(express.json());
+
+app.get("/api/products", async (_req, res) => {
+  let status = 200;
+  let error = null;
+  let products;
+  try {
+    products = await fetchProducts(res.locals.shopify.session);
+    res.status(200).send(products);
+  } catch (e) {
+    console.log(`Failed to process products/create: ${e.message}`);
+    status = 500;
+    error = e.message;
+    res.status(status).send({ success: status === 200, error });
+  }
+});
 
 app.get("/api/products/count", async (_req, res) => {
   const countData = await shopify.api.rest.Product.count({

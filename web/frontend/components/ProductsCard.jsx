@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Card, TextContainer, Text } from "@shopify/polaris";
 import { Toast } from "@shopify/app-bridge-react";
+import { Card, Text, VerticalStack } from "@shopify/polaris";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAppQuery, useAuthenticatedFetch } from "../hooks";
 
@@ -49,6 +49,12 @@ export function ProductsCard() {
       });
     }
   };
+  const fetchProducts = async () => {
+    setIsLoading(true);
+    const response = await fetch("/api/products");
+    console.log(await response.json());
+    setIsLoading(false);
+  };
 
   return (
     <>
@@ -57,14 +63,12 @@ export function ProductsCard() {
         title={t("ProductsCard.title")}
         sectioned
         primaryFooterAction={{
-          content: t("ProductsCard.populateProductsButton", {
-            count: productsCount,
-          }),
-          onAction: handlePopulate,
+          content: "Fetch Products",
+          onAction: fetchProducts,
           loading: isLoading,
         }}
       >
-        <TextContainer spacing="loose">
+        <VerticalStack spacing="loose">
           <p>{t("ProductsCard.description")}</p>
           <Text as="h4" variant="headingMd">
             {t("ProductsCard.totalProductsHeading")}
@@ -72,8 +76,36 @@ export function ProductsCard() {
               {isLoadingCount ? "-" : data.count}
             </Text>
           </Text>
-        </TextContainer>
+        </VerticalStack>
       </Card>
     </>
   );
 }
+
+/* 
+return (
+  <>
+    {toastMarkup}
+    <Card
+      title={t("ProductsCard.title")}
+      sectioned
+      primaryFooterAction={{
+        content: t("ProductsCard.populateProductsButton", {
+          count: productsCount,
+        }),
+        onAction: handlePopulate,
+        loading: isLoading,
+      }}
+    >
+      <TextContainer spacing="loose">
+        <p>{t("ProductsCard.description")}</p>
+        <Text as="h4" variant="headingMd">
+          {t("ProductsCard.totalProductsHeading")}
+          <Text variant="bodyMd" as="p" fontWeight="semibold">
+            {isLoadingCount ? "-" : data.count}
+          </Text>
+        </Text>
+      </TextContainer>
+    </Card>
+  </>
+);*/
