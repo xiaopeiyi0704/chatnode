@@ -1,10 +1,10 @@
 import {
-  Card,
+  AlphaCard,
   Page,
   Layout,
-  TextContainer,
+  VerticalStack,
   Image,
-  Stack,
+  LegacyStack,
   Link,
   Text,
 } from "@shopify/polaris";
@@ -13,24 +13,26 @@ import { useTranslation, Trans } from "react-i18next";
 
 import { trophyImage } from "../assets";
 
-import { ProductsCard } from "../components";
+import { ProductsCard, ProductCard } from "../components";
 
 export default function HomePage() {
   const { t } = useTranslation();
   return (
-    <Page narrowWidth>
+    /*  <Page narrowWidth> */
+    <Page>
       <TitleBar title={t("HomePage.title")} primaryAction={null} />
       <Layout>
-        <Layout.Section>
-          <Card sectioned>
-            <Stack
+        {/*  <Layout.Section>
+          <AlphaCard sectioned>
+            <LegacyStack
               wrap={false}
               spacing="extraTight"
               distribution="trailing"
               alignment="center"
+              //default is horizontal layout
             >
-              <Stack.Item fill>
-                <TextContainer spacing="loose">
+              <LegacyStack.Item fill>
+                <VerticalStack spacing="loose">
                   <Text as="h2" variant="headingMd">
                     {t("HomePage.heading")}
                   </Text>
@@ -70,9 +72,9 @@ export default function HomePage() {
                       }}
                     />
                   </p>
-                </TextContainer>
-              </Stack.Item>
-              <Stack.Item>
+                </VerticalStack>
+              </LegacyStack.Item>
+              <LegacyStack.Item>
                 <div style={{ padding: "0 20px" }}>
                   <Image
                     source={trophyImage}
@@ -80,12 +82,15 @@ export default function HomePage() {
                     width={120}
                   />
                 </div>
-              </Stack.Item>
-            </Stack>
-          </Card>
-        </Layout.Section>
+              </LegacyStack.Item>
+            </LegacyStack>
+          </AlphaCard>
+        </Layout.Section> */}
         <Layout.Section>
           <ProductsCard />
+        </Layout.Section>
+        <Layout.Section>
+          <ProductCard />
         </Layout.Section>
       </Layout>
     </Page>

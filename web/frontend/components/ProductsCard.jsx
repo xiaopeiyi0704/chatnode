@@ -1,4 +1,4 @@
-import { Toast } from "@shopify/app-bridge-react";
+import { Toast, useNavigate } from "@shopify/app-bridge-react";
 import { Card, Text, VerticalStack } from "@shopify/polaris";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -6,11 +6,14 @@ import { useAppQuery, useAuthenticatedFetch } from "../hooks";
 
 export function ProductsCard() {
   const emptyToastProps = { content: null };
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [toastProps, setToastProps] = useState(emptyToastProps);
   const fetch = useAuthenticatedFetch();
   const { t } = useTranslation();
   const productsCount = 5;
+
+  // navigate is a hook that take you(from app side) to store admin side
+  const navigate = useNavigate();
 
   const {
     data,
@@ -63,19 +66,22 @@ export function ProductsCard() {
         title={t("ProductsCard.title")}
         sectioned
         primaryFooterAction={{
-          content: "Fetch Products",
-          onAction: fetchProducts,
+          content: "Populate 5 Products",
+          onAction: handlePopulate,
           loading: isLoading,
         }}
+        secondaryFooterActions={[
+          {
+            content: "View All Products",
+            onAction: () => {
+              //open product page in admin in new tab
+              navigate({ name: "Product" }, { target: "new" });
+            },
+          },
+        ]}
       >
         <VerticalStack spacing="loose">
-          <p>{t("ProductsCard.description")}</p>
-          <Text as="h4" variant="headingMd">
-            {t("ProductsCard.totalProductsHeading")}
-            <Text variant="bodyMd" as="p" fontWeight="semibold">
-              {isLoadingCount ? "-" : data.count}
-            </Text>
-          </Text>
+          <p>Use this tool to create and update products.</p>
         </VerticalStack>
       </Card>
     </>

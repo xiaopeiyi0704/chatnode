@@ -47,7 +47,7 @@ app.get("/api/products", async (_req, res) => {
     products = await fetchProducts(res.locals.shopify.session);
     res.status(200).send(products);
   } catch (e) {
-    console.log(`Failed to process products/create: ${e.message}`);
+    console.log(`Failed to fetch products: ${e.message}`);
     status = 500;
     error = e.message;
     res.status(status).send({ success: status === 200, error });
