@@ -7,20 +7,26 @@ import {
   LegacyStack,
   Link,
   Text,
-} from "@shopify/polaris";
-import { TitleBar } from "@shopify/app-bridge-react";
-import { useTranslation, Trans } from "react-i18next";
+} from '@shopify/polaris'
+import { TitleBar } from '@shopify/app-bridge-react'
+import { useTranslation, Trans } from 'react-i18next'
 
-import { trophyImage } from "../assets";
+import { trophyImage } from '../assets'
 
-import { ProductsCard, ProductCard } from "../components";
+import { ProductsCard, ProductCard } from '../components'
+import { useAppQuery } from '../hooks'
+import { ProductList } from '../components/ProductList'
 
 export default function HomePage() {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
+  const { data, isLoading, isRefetching } = useAppQuery({
+    url: '/api/products',
+  })
+  console.log(data)
   return (
     /*  <Page narrowWidth> */
-    <Page>
-      <TitleBar title={t("HomePage.title")} primaryAction={null} />
+    <Page title="Product Dashboard">
+      <TitleBar title={t('HomePage.title')} primaryAction={null} />
       <Layout>
         {/*  <Layout.Section>
           <AlphaCard sectioned>
@@ -90,9 +96,13 @@ export default function HomePage() {
           <ProductsCard />
         </Layout.Section>
         <Layout.Section>
-          <ProductCard />
+          <ProductList
+            data={data}
+            isLoading={isLoading}
+            isRefetching={isRefetching}
+          />
         </Layout.Section>
       </Layout>
     </Page>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import shopify from "../shopify.js";
+import shopify from '../shopify.js'
 
 const FETCH_PRODUCTS_QUERY = `
 {
@@ -6,37 +6,93 @@ const FETCH_PRODUCTS_QUERY = `
       edges {
         node{
           id
-          createdAt
           description
+          title
+          legacyResourceId
+          images(first: 1) {
+            edges {
+              node {
+                url
+              }
+            }
+          }
+          variants(first: 10) {
+            edges {
+              node {
+                id
+                price
+                title
+              }
+            }
+          }
         }
       }
     }
   }`
 
+const formatGqlResponse = (res) => {
+  const edges = res?.body?.data?.products?.edges || []
 
- 
+  if (!edges.length) return []
 
-// create products with Graphql api
- export default  async function fetchProducts(
-  session
-) {
-  const client = new shopify.api.clients.Graphql({ session });
+  return edges.map(({ node }) => ({
+    id: node.id,
+    legacyId: node.legacyResourceId,
+    title: node.title,
+    description: node.description,
+    image:
+      node.images.edges[0]?.node?.url ||
+      'https://res.cloudinary.com/dci7ukl75/image/upload/v1668205411/defff_uhx4wz.png', // add empty image link here
+    variants: node.variants.edges.map(({ node }) => ({
+      id: node.id,
+      title: node.title,
+      price: node.price,
+    })),
+  }))
+}
+
+export default async function fetchProducts(session) {
+  const client = new shopify.api.clients.Graphql({ session })
 
   try {
     const res = await client.query({
       data: {
-         query: FETCH_PRODUCTS_QUERY
-      }
-  })
+        query: FETCH_PRODUCTS_QUERY,
+      },
+    })
 
-    return res.body.data.products.edges;
+    return formatGqlResponse(res)
   } catch (error) {
-    if (error instanceof GraphqlQueryError) {
+    if (error instanceof Shopify.Errors.GraphqlQueryError) {
       throw new Error(
-        `${error.message}\n${JSON.stringify(error.response, null, 2)}`
-      );
+        `${error.message}\n${JSON.stringify(error.response, null, 2)}`,
+      )
     } else {
-      throw error;
+      throw error
     }
   }
 }
+/* 
+// create products with Graphql api
+export default async function fetchProducts(session) {
+  const client = new shopify.api.clients.Graphql({ session })
+
+  try {
+    const res = await client.query({
+      data: {
+        query: FETCH_PRODUCTS_QUERY,
+      },
+    })
+
+    return res.body.data.products.edges
+  } catch (error) {
+    if (error instanceof GraphqlQueryError) {
+      throw new Error(
+        `${error.message}\n${JSON.stringify(error.response, null, 2)}`,
+      )
+    } else {
+      throw error
+    }
+  }
+}
+*/
