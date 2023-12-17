@@ -2,7 +2,7 @@
 
 name = "chatnode"
 client_id = "972970b2438bbd1a48b61d2645dd2cca"
-application_url = "https://sophisticated-judge-joshua-teddy.trycloudflare.com"
+application_url = "https://pope-amongst-trinity-permission.trycloudflare.com"
 embedded = true
 
 [access_scopes]
@@ -11,10 +11,10 @@ scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://sophisticated-judge-joshua-teddy.trycloudflare.com/auth/callback",
-  "https://sophisticated-judge-joshua-teddy.trycloudflare.com/auth/shopify/callback",
-  "https://sophisticated-judge-joshua-teddy.trycloudflare.com/api/auth/callback",
-  "https://sophisticated-judge-joshua-teddy.trycloudflare.com/.shopify/graphiql/auth/callback"
+  "https://pope-amongst-trinity-permission.trycloudflare.com/auth/callback",
+  "https://pope-amongst-trinity-permission.trycloudflare.com/auth/shopify/callback",
+  "https://pope-amongst-trinity-permission.trycloudflare.com/api/auth/callback",
+  "https://pope-amongst-trinity-permission.trycloudflare.com/.shopify/graphiql/auth/callback"
 ]
 
 [webhooks]
