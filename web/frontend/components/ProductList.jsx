@@ -1,7 +1,7 @@
-import { Card, EmptyState, Layout, Spinner } from '@shopify/polaris'
+import { EmptyState, Layout, Spinner, Card } from '@shopify/polaris'
 import { ProductCard } from './ProductCard'
 
-export const ProductList = (data, isLoading, isRefetching) => {
+export const ProductList = ({ data, isLoading, isRefetching }) => {
   if (isLoading || isRefetching) {
     return (
       <Layout>
@@ -13,11 +13,11 @@ export const ProductList = (data, isLoading, isRefetching) => {
   return (
     <Layout>
       {data?.products.length ? (
-        data.products.map((product) => {
-          ;<Layout.Section>
+        data.products.map((product) => (
+          <Layout.Section key={product.id}>
             <ProductCard {...product}></ProductCard>
           </Layout.Section>
-        })
+        ))
       ) : (
         <Layout.Section>
           <Card>
